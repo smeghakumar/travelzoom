@@ -6,7 +6,7 @@
 
 # TravelApp
 1. Navigate to folder where you want to clone project and open command prompt and write 
-   'git clone https://github.com/njclabs/travelzoom.git'
+   'git clone https://github.com/smeghakumar/travelzoom.git'
 2. Open command prompt and run 'npm install'.
 3. In the command prompt only run 'npm start', your application will be started.
 4. Open browser and enter `http://localhost:4200/`
