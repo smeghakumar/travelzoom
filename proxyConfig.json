@@ -1,0 +1,8 @@
+{
+    "/api/*": {
+        "target": "http://mytravel-experience-api.us-e2.cloudhub.io",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
+    }
+}

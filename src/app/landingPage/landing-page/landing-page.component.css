@@ -1,0 +1,136 @@
+.inProgress {
+  position: absolute;
+  top: 76px;
+  left: 0;
+  right: 20%;
+  bottom:0%;
+  background-color: #f9f9fb;
+  color: white;
+  font-weight: 600;
+  z-index: 1;
+}
+
+.card {
+  position: relative;
+display: flex;
+flex-direction: column;
+min-width: 0;
+word-wrap: break-word;
+background-color: #fff;
+background-clip: border-box;
+border: 1px solid rgba(0,0,0,.125);
+border-radius: .25rem;
+color: black;
+}
+
+.trainBody {
+    position: absolute;
+    top: 76px;
+    left: 0;
+    right: 20%;
+    bottom:0%;
+    background-color: #f9f9fb;
+    color: white;
+    font-weight: 600;
+  }
+
+  .trainBody input {
+    margin-left:10px;
+  }
+
+  .trainBody select {
+    margin-left:10px;
+    width: 200px
+  }
+
+  .trainBody span {
+    margin-left:100px;
+    color:#080808
+  }
+
+  .trainBody button {
+    margin-left:50px;
+    width: 150px;
+  }
+
+  .covidData {
+    position: absolute;
+    top: 76px;
+    left: 80%;
+    right: 0;
+    bottom:0%;
+    align-items: center;
+    background-color: #d4dcf3;
+  }
+
+  #covidTable {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#covidTable td, #covidTable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: small;
+}
+
+#covidTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#covidTable tr:hover {background-color: #ddd;}
+
+#covidTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #e03417;
+  color: white;
+}
+
+#trainTable {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#trainTable td, #trainTable th {
+  border: 1px solid #ddd;
+  padding: 2px;
+}
+
+#trainTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#trainTable tr:hover {background-color: #ddd;}
+
+#trainTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #5684bd;
+  color: white;
+}
+
+table {
+  width: 100%;
+}
+
+.example-h2 {
+  margin: 10px;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.example-margin {
+  margin: 0 10px;
+}
+
+.customizeButton{
+  margin-left: 0px;
+  font-size: 18px;
+  background: darkgray;
+}

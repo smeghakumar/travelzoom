@@ -1,0 +1,206 @@
+<div class="container mx-5 my-5 col-xl-11">
+  <h1 class="h3 mb-0 text-gray-800 my-2">Search Trains</h1>
+  <div class="row">
+    <form class="d-md-block form col-xl-12">
+      <div class="input-group">
+        <!-- Search form -->
+        <div class="col-xl-4">
+          <h6 class="h6 mb-0 text-secondary my-2 col-xl-6">Source</h6>
+
+          <input #origin class="form-control mr-2 mt-2" type="text" placeholder="Source Name" aria-label="Search"
+            aria-describedby="basic-addon2" [(ngModel)]="originModel" [ngbTypeahead]="locationSearch"
+            [resultFormatter]="formatter" [inputFormatter]="inputFormatter" />
+
+          <input #originPostCode class="form-control mr-2 mt-2" type="text" placeholder="Source postal code"
+            aria-label="Search" aria-describedby="basic-addon2" [(ngModel)]="originPostCodeModel"
+            [ngbTypeahead]="postalCodeSearch" [resultFormatter]="postCodeformatter"
+            [inputFormatter]="inputPostCodeFormatter" />
+        </div>
+        <div class="col-xl-4">
+          <h6 class="h6 mb-0 text-secondary my-2 col-xl-6">Destination</h6>
+          <input #destination class="form-control mr-2 mt-2" type="text" placeholder="Destination Name"
+            aria-label="Search" aria-describedby="basic-addon2" [(ngModel)]="destinationModel"
+            [ngbTypeahead]="locationSearch" [resultFormatter]="formatter" [inputFormatter]="inputFormatter" />
+          <input #destinationPostCode class="form-control mt-2" type="text" placeholder="Destination postal code"
+            aria-label="Search" aria-describedby="basic-addon2" [(ngModel)]="destinationPostCodeModel"
+            [ngbTypeahead]="postalCodeSearch" [resultFormatter]="postCodeformatter"
+            [inputFormatter]="inputPostCodeFormatter" />
+        </div>
+        <div class="col-xl-3">
+          <h6 class="h6 mb-0 text-secondary my-2 col-xl-6">Date</h6>
+          <div class="input-group md-form input-with-post-icon datepicker mt-2">
+            <input #travelDate placeholder="Select date" type="date" id="example" class="form-control">
+          </div>
+          <button class="btn btn-primary mt-2 float-right" type="button"
+            (click)="fetchTravelData(origin.value,destination.value,travelDate.value, originPostCode.value, destinationPostCode.value)">Search</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <ul class="nav nav-tabs mt-5 col-xl-12" id="myTab" role="tablist" *ngIf="showWeatherAndCovidData">
+    <li class="nav-item">
+      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+        aria-selected="true">Travel</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+        aria-selected="false">Nearby</a>
+    </li>
+  </ul>
+  <div class="tab-content col-12" id="myTabContent">
+    <div class="tab-pane fade show active col-12" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div class="row" *ngIf="showWeatherAndCovidData">
+            <!-- CSS -->
+            <div class="col-5 mt-5">
+              <div class="card card-inverse" style="background-color: #333; border-color: #333;">
+                <div class="card-block">
+                  <div class="row">
+                    <div class="col-md-8 ml-4 mb-5 mt-5">
+                      <h2 class="card-title text-white">Travel Date Weather Forecast</h2>
+                      <p class="card-text" style="color: rgba(255,255,240,.65);"><strong>Temperature(in celcius)
+                        </strong> {{weatherDetails.temperature}}
+                        deg </p>
+                      <p class="card-text" style="color: rgba(255,255,240,.65);"><strong>Humidity(%) </strong>
+                        {{weatherDetails.humidity}}% </p>
+                      <p class="card-text" style="color: rgba(255,255,240,.65);"><strong>Weather: </strong>
+                        {{weatherDetails.weather}} </p>
+                      <p class="card-text" style="color: rgba(255,255,240,.65);"><strong>Wind Speed(in Kms/hr) </strong>
+                        {{weatherDetails.windSpeed}} </p>
+
+                    </div>
+                    <div class="col-md-4 col-sm-4 text-center">
+                      <fa-icon class="mr-1 bg-white" [icon]='["fas", "fa-cloud"]'></fa-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <div class="col-6 mt-5">
+                <div class="card">
+                  <div class="card-header">
+                    <fa-icon class="mr-1" [icon]='["fas", "chart-bar"]'></fa-icon>Covid Update
+                  </div>
+                  <div class="card-body">
+                    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                      [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType">
+                    </canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <form *ngIf="showWeatherAndCovidData">
+              <!-- <div class="form-group form-inline">Full text search: <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="countryService.searchTerm" /><span class="ml-3" *ngIf="countryService.loading$ | async">Loading...</span></div> -->
+              <table class="table shadow rounded mt-5">
+                <thead class="bg-secondary">
+                  <tr class="d-flex text-center text-white">
+                    <th class="col-1">Train No.</th>
+                    <th class="col-3">Origin</th>
+                    <th class="col-3">Destination</th>
+                    <th class="col-2">Estimated Arrival Time</th>
+                    <th class="col-2">Estimated Departure Time</th>
+                    <th class="col-1"> Total Duration</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="d-flex text-center" *ngFor="let data of trainData">
+                    <th class="col-1" scope="row">{{ data.trainNumber }}</th>
+                    <td class="col-3">{{ data.origin }}</td>
+                    <td class="col-3">{{ data.destination }}</td>
+                    <td class="col-2">{{ data.eta }}</td>
+                    <td class="col-2">{{ data.etd }}</td>
+                    <td class="col-1">{{ data.duration }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+        </div>
+
+      <div class="tab-pane fade mt-5" id="profile" role="tabpanel" aria-labelledby="profile-tab" *ngIf="showWeatherAndCovidData">
+          <div class="row">
+            <div class="col-3">
+              <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active show" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
+                  aria-controls="v-pills-home" aria-selected="true">Restaurants</a>
+                <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
+                  aria-controls="v-pills-profile" aria-selected="false">Supermarkets</a>
+                <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab"
+                  aria-controls="v-pills-messages" aria-selected="false">Tourism</a>
+              </div>
+            </div>
+            <div class="col-9 border-left">
+              <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade active show" id="v-pills-home" role="tabpanel"
+                  aria-labelledby="v-pills-home-tab">
+                  <form>
+                    <table class="table shadow rounded">
+                      <thead class="bg-secondary">
+                        <tr class="d-flex text-center text-white">
+                          <th class="col-3">Name</th>
+                          <th class="col-6">Address</th>
+                          <th class="col-3">Distance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="d-flex text-center" *ngFor="let data of restaurants">
+                          <th class="col-3" scope="row">{{ data.name }}</th>
+                          <td class="col-6">{{ data.address }}</td>
+                          <td class="col-3">{{ data.distance }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </form>
+                </div>
+                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                  <form>
+                    <table class="table shadow rounded">
+                      <thead class="bg-secondary">
+                        <tr class="d-flex text-center text-white">
+                          <th class="col-3">Name</th>
+                          <th class="col-6">Address</th>
+                          <th class="col-3">Distance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="d-flex text-center" *ngFor="let data of supermarkets">
+                          <th class="col-3" scope="row">{{ data.name }}</th>
+                          <td class="col-6">{{ data.address }}</td>
+                          <td class="col-3">{{ data.distance }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </form>
+                </div>
+                <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                  <form>
+                    <table class="table shadow rounded">
+                      <thead class="bg-secondary">
+                        <tr class="d-flex text-center text-white">
+                          <th class="col-3">Name</th>
+                          <th class="col-6">Address</th>
+                          <th class="col-3">Distance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="d-flex text-center" *ngFor="let data of tourism">
+                          <th class="col-3" scope="row">{{ data.name }}</th>
+                          <td class="col-6">{{ data.address }}</td>
+                          <td class="col-3">{{ data.distance }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <style>
+    .nav-link {
+  border-bottom: 1px solid #C0C0C0;
+}
+.border-left {
+  border-left: 1px solid #C0C0C0;
+}
+  </style>

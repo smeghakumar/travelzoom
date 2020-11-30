@@ -1,0 +1,10 @@
+.loginStyle {
+    position: absolute;
+    top: 76px;
+    background-color: #f9f9fb;
+    color: black;
+    font-weight: 600;
+    left: 0;
+    right:0;
+    bottom: 0;
+  }
